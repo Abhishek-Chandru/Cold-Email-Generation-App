@@ -2,9 +2,8 @@ import os
 import streamlit as st
 from langchain_community.document_loaders import WebBaseLoader
 
-# Import Chain: adjust this to match your file name (chain.py vs chains.py)
-from chains import Chain   # <- use this if your file is chain.py
-# from chains import Chain  # <- use this if you renamed chain.py -> chains.py
+# Import Chain: adjust this to match your file name (chains.py)
+from chains import Chain
 
 from utils import clean_text, load_resume_from_fileobj, load_resume_from_path
 
@@ -23,10 +22,7 @@ def create_streamlit_app(chain: Chain):
         type=["txt", "pdf", "docx"]
     )
 
-    st.sidebar.header("Applicant details")
-    applicant_name = st.sidebar.text_input("Applicant name (how you want it to appear in the email):", value="Name")
-    applicant_title = st.sidebar.text_input("Optional sign-off / title (e.g., Product Ops | Bengaluru):", value="")
-    # Job input options
+    # Job input options (unchanged)
     st.header("Job Description Input")
     jd_input_type = st.radio("Provide job description via:", ("Paste JD text (recommended)", "Job posting URL", "Upload JD file"))
     job_text = ""
@@ -54,9 +50,8 @@ def create_streamlit_app(chain: Chain):
         try:
             if uploaded_resume:
                 resume_text = load_resume_from_fileobj(uploaded_resume)
-
             else:
-                st.error("No resume provided. Upload one or enable local resume.")
+                st.error("No resume provided. Upload one to generate an email.")
                 return
         except Exception as e:
             st.error(f"Error loading resume: {e}")
@@ -94,7 +89,7 @@ def create_streamlit_app(chain: Chain):
 
                 st.success(f"Found {len(jobs)} job posting(s). Generating emails...")
                 for i, job in enumerate(jobs, start=1):
-                    email = chain.write_personalized_mail(job, resume_text, applicant_name=applicant_name, applicant_title=applicant_title)
+                    email = chain.write_personalized_mail(job, resume_text)
                     st.subheader(f"Email for job #{i}: {job.get('role', 'Unknown role')}")
                     st.code(email, language='markdown')
 

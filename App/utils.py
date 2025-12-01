@@ -42,7 +42,20 @@ def clean_text(text):
     text = re.sub(r"[^\S\n]+", " ", text)
     lines = [ln.strip() for ln in text.split("\n") if ln.strip()]
     return "\n".join(lines)
-
+def truncate_text_by_chars(text: str, max_chars: int = 4000) -> str:
+    """
+    Truncate text to approximately max_chars, attempting to cut at sentence boundary.
+    """
+    if not text:
+        return ""
+    text = str(text)
+    if len(text) <= max_chars:
+        return text
+    # try to cut at last period within window to avoid chopping sentence
+    cut = text.rfind('.', 0, max_chars)
+    if cut == -1:
+        cut = max_chars
+    return text[:cut].rstrip() + "\n\n[Truncated]"
 
 def load_resume_from_path():
     return None
