@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.cache
+*.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Streamlit temp
+.streamlit/
+
+# VSCode / PyCharm
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+
+# Data / vector stores
+vectorstore/
+chromadb/
+*.db
+
+# Uploaded files / local resumes
+resource/*.pdf
+resource/*.docx
+resource/*.txt
